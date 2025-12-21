@@ -1,0 +1,48 @@
+#هذي هنا هي المكتبات المستخدمه في الكود 
+import smtplib
+import pandas as pd
+from email.mime.text import MIMEText
+
+
+# (في حالة انك تستخدم google colab)هنا تحط رابط الملف
+df = pd.read_excel("Send_messages.xlsx")
+
+# هنا تكتب بريدك انت
+sender_email = "" # هنا نحط الايميل
+sender_password = ""  # هنا تحط الباس حق التطبيق
+subject = "Test to explain" # هنا نحط موضوع الرسالة
+
+
+# هنا قاعد يقرا الملف طبعا تقدر تعدل هنا في حالة عندك صف او عمود معين بس لازم تغير الكود 
+for index, row in df.iterrows():
+    re_email = row['Email']
+    re_name = row['Name']
+
+    # هنا تكتب الرسالة
+    message = f"""
+     Dear {re_name},# هنا اسم الشخص الي اخذناه من رابط الملف
+
+    {"Regarding the students list of the planned visit on 28th of April to the Innovation hub, This is The final list of all the attendees. "}
+
+
+    Please find the attached file
+
+    Kind Regards,
+    your name.
+    """
+
+    # لا تلمس شيء هنا
+    msg = MIMEText(message, 'plain', 'utf-8')
+    msg['Subject'] = subject
+    msg['From'] = sender_email
+    msg['To'] = re_email
+
+    # تأكيد الارسال
+    try:
+        with smtplib.SMTP("smtp.gmail.com", 587) as server:
+            server.starttls()
+            server.login(sender_email, sender_password)
+            server.sendmail(sender_email, re_email, msg.as_string())
+        print(f"تم إرسال الرسالة إلى {re_name} ({re_email}) بنجاح!")
+    except Exception as e:
+        print(f"حدث خطأ عند الإرسال إلى {re_email}: {e}")
