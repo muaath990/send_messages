@@ -31,7 +31,7 @@ for index, row in df.iterrows():
     your name.
     """
 
-    # لا تلمس شيء هنا
+    
     msg = MIMEText(message, 'plain', 'utf-8')
     msg['Subject'] = subject
     msg['From'] = sender_email
